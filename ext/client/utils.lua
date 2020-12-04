@@ -11,7 +11,6 @@ function CachedJsExecutor:Update(value)
   if self.prev == value then
     return
   end
-
   self.prev = value
 
   WebUI:ExecuteJS(string.format('%s(%s)', self.funcName, value))

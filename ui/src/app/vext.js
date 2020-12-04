@@ -1,5 +1,5 @@
 export const state = {
-  enabled: true,
+  enabled: false,
   yaw: 0,
 };
 
