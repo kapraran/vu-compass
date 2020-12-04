@@ -1,0 +1,21 @@
+{
+  "dependencies": {
+    "parcel-bundler": "^1.12.4",
+    "prettier": "^2.2.1",
+    "vue": "^2.6.12",
+    "vue-hot-reload-api": "^2.3.4"
+  },
+  "scripts": {
+    "start": "parcel src/index.html",
+    "clear": "rimraf dist",
+    "prettier": "prettier --write \"src/**/*.{js,vue,css,scss,html}\" ",
+    "build:parcel": "parcel build src/index.html --no-source-maps",
+    "build:vuicc": "vuicc dist ../ui.vuic",
+    "build": "yarn clear & yarn build:parcel & yarn build:vuicc"
+  },
+  "devDependencies": {
+    "@vue/component-compiler-utils": "^3.2.0",
+    "sass": "^1.29.0",
+    "vue-template-compiler": "^2.6.12"
+  }
+}
