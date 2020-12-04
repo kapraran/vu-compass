@@ -5,3 +5,7 @@ import { vext } from "./vext";
 new Vue({ render: (createElement) => createElement(App) }).$mount("#root");
 
 window.vext = vext;
+
+if (typeof WebUI === 'undefined') {
+  document.body.style.backgroundColor = 'green'
+}

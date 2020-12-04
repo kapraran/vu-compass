@@ -11,7 +11,7 @@
           :key="tick"
         >
           <div class="tick"></div>
-          <span>{{ tick }}</span>
+          <span>{{ label(tick) }}</span>
         </li>
       </ul>
     </div>
@@ -19,6 +19,8 @@
 </template>
 
 <script>
+const degLabels = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N']
+
 export default {
   props: {
     enabled: Boolean,
@@ -28,7 +30,7 @@ export default {
   data() {
     return {
       step: 5,
-      visibleTicks: 24,
+      visibleTicks: 23,
     };
   },
 
@@ -36,20 +38,24 @@ export default {
     tickClasses(deg) {
       const classes = ['tick-container']
 
-      if (deg % 15 === 0) {
+      if (deg % 45 === 0) {
         classes.push('full')
-      } else if (deg % 5 === 0) {
-        // classes.push('semi')
+      } else if (deg % 15 === 0) {
+        classes.push('semi')
       }
 
       return classes
+    },
+
+    label(deg) {
+      return deg % 45 === 0 ? degLabels[deg/45]: deg;
     }
   },
 
   computed: {
     ticksList() {
       const initAngle =
-        Math.floor((this.yaw - (this.visibleTicks / 2) * this.step) / 5) * 5;
+        Math.floor((this.yaw - Math.floor(this.visibleTicks / 2) * this.step) / 5) * 5;
       return new Array(this.visibleTicks)
         .fill(0)
         .map((v, i) => initAngle + i * this.step)
@@ -77,9 +83,23 @@ export default {
   .compass-container {
 
     ul.tick-strip {
+      position: relative;
       padding: 0;
       margin: 0;
       display: flex;
+
+      &:before {
+        position: absolute;
+        z-index: 0;
+        left: 50%;
+        top: 0;
+        content: "";
+        width: 0.3vh;
+        height: 2.8vh;
+        min-width: 3px;
+        margin-left: -0.15vh;
+        background-color: rgba(255, 0, 0, 0.15);
+      }
 
       li.tick-container {
         position: relative;
@@ -96,13 +116,16 @@ export default {
         .tick {
           width: 0.1vh;
           min-width: 2px;
-          height: 0.4vh;
-          background-color: #fff;
-          box-shadow: 0 0 4px rgba(0, 0, 0, 0.48);
+          height: 0.3vh;
+          background-color: rgba(255, 255, 255, 0.64);
+          box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
         }
 
         &.full .tick {
-          height: 0.8vh;
+          height: 0.6vh;
+          min-width: 3px;
+          width: 0.15vh;
+          background-color: #fff;
         }
 
         span {
@@ -110,15 +133,23 @@ export default {
           position: absolute;
           font-size: 1.4vh;
           text-align: center;
-          transform: translateY(1.5vh);
-          font-weight: 600;
+          transform: translateY(1.2vh);
+          font-weight: 400;
           color: #fff;
-          text-shadow: 0 0 4px rgba(0, 0, 0, 0.48);
+          letter-spacing: 0.2vh;
+          text-shadow: 0 0 4px rgba(0, 0, 0, 0.32);
+          z-index: 999;
         }
 
         &.semi span,
         &.full span {
           display: block;
+        }
+
+        &.full span {
+          font-size: 1.7vh;
+          color: rgb(252, 255, 228);
+          font-weight: 700;
         }
       }
     }

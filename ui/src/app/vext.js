@@ -5,5 +5,5 @@ export const state = {
 
 export const vext = {
   setEnabled: (enabled) => (state.enabled = enabled),
-  updateYaw: (yaw) => (state.yaw = yaw),
+  setYaw: (yaw) => (state.yaw = yaw),
 };

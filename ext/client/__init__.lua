@@ -11,7 +11,7 @@ Events:Subscribe('Compass:Config', function(userConfig)
   end
 end)
 
-local uiYaw = CachedJsExecutor('vext.updateYaw', 0)
+local uiYaw = CachedJsExecutor('vext.setYaw', 0)
 
 Events:Subscribe('UI:DrawHud', function()
   local player = PlayerManager:GetLocalPlayer()
