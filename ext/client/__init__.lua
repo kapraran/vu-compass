@@ -1,13 +1,17 @@
 require('config')
 require('utils')
 
+Events:Subscribe('Extension:Loaded', function()
+  WebUI:Init()
+end)
+
 Events:Subscribe('Compass:Config', function(userConfig)
   for k, v in pairs(userConfig) do
     Config[k] = v
   end
 end)
 
-local uiYaw = CachedJsExecutor('updateYaw', 0)
+local uiYaw = CachedJsExecutor('vext.updateYaw', 0)
 
 Events:Subscribe('UI:DrawHud', function()
   local player = PlayerManager:GetLocalPlayer()
@@ -21,8 +25,8 @@ Events:Subscribe('UI:DrawHud', function()
 
   uiYaw:Update(yawDeg)
 
-  Events:Dispatch('Debug:Info', {
-    ['yaw'] = yaw,
-    ['deg'] = yawDeg
-  })
+  -- Events:Dispatch('Debug:Info', {
+  --   ['yaw'] = yaw,
+  --   ['deg'] = yawDeg
+  -- })
 end)
