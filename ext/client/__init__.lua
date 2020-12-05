@@ -12,8 +12,6 @@ Events:Subscribe('Compass:Config', function(userConfig)
   end
 end)
 
-local uiYaw = CachedJsExecutor('vext.setYaw', 0)
-
 Events:Subscribe('UI:DrawHud', function()
   -- get player
   local player = PlayerManager:GetLocalPlayer()
@@ -21,6 +19,8 @@ Events:Subscribe('UI:DrawHud', function()
     uiEnabled:Update(false)
     return
   end
+
+  uiEnabled:Update(isHud and true)
 
   -- get yaw
   local yaw = player.input.authoritativeAimingYaw
