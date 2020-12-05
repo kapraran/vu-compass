@@ -1,3 +1,5 @@
+![](./assets/vu-ccompass.small.png)
+
 # vu-compass
 A compass ui-mod for Venice Unleashed
 
