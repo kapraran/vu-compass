@@ -1,11 +1,11 @@
 <template>
-  <div class="compass-widget" v-if="enabled">
+  <div :class="['compass-widget', { bottom: bottom }]" v-if="enabled">
     <div class="compass-container">
       <ul class="tick-strip">
         <li
           :class="tickClasses(tick)"
           :style="{
-            transform: ticksTranslateX
+            transform: ticksTranslateX,
           }"
           v-for="tick in ticksList"
           :key="tick"
@@ -19,11 +19,12 @@
 </template>
 
 <script>
-const degLabels = ['N', 'NE', 'E', 'SE', 'S', 'SW', 'W', 'NW', 'N']
+const degLabels = ["N", "NE", "E", "SE", "S", "SW", "W", "NW", "N"];
 
 export default {
   props: {
     enabled: Boolean,
+    bottom: Boolean,
     yaw: Number,
   },
 
@@ -36,26 +37,28 @@ export default {
 
   methods: {
     tickClasses(deg) {
-      const classes = ['tick-container']
+      const classes = ["tick-container"];
 
       if (deg % 45 === 0) {
-        classes.push('full')
+        classes.push("full");
       } else if (deg % 15 === 0) {
-        classes.push('semi')
+        classes.push("semi");
       }
 
-      return classes
+      return classes;
     },
 
     label(deg) {
-      return deg % 45 === 0 ? degLabels[deg/45]: deg;
-    }
+      return deg % 45 === 0 ? degLabels[deg / 45] : deg;
+    },
   },
 
   computed: {
     ticksList() {
       const initAngle =
-        Math.floor((this.yaw - Math.floor(this.visibleTicks / 2) * this.step) / 5) * 5;
+        Math.floor(
+          (this.yaw - Math.floor(this.visibleTicks / 2) * this.step) / 5
+        ) * 5;
       return new Array(this.visibleTicks)
         .fill(0)
         .map((v, i) => initAngle + i * this.step)
@@ -63,10 +66,10 @@ export default {
     },
 
     ticksTranslateX() {
-      const left = this.yaw % this.step
-      const offset = (left/this.step) * 2
-      return `TranslateX(-${offset}vh)`
-    }
+      const left = this.yaw % this.step;
+      const offset = (left / this.step) * 1.8;
+      return `TranslateX(-${offset}vh)`;
+    },
   },
 };
 </script>
@@ -80,8 +83,20 @@ export default {
   left: 0;
   right: 0;
 
-  .compass-container {
+  &.bottom {
+    bottom: 0;
+    top: auto;
 
+    li.tick-container {
+      align-items: flex-end;
+
+      span {
+        transform: translateY(-1.2vh) !important;
+      }
+    }
+  }
+
+  .compass-container {
     ul.tick-strip {
       position: relative;
       padding: 0;
@@ -89,16 +104,16 @@ export default {
       display: flex;
 
       &:before {
+        content: "";
         position: absolute;
         z-index: 0;
         left: 50%;
         top: 0;
-        content: "";
         width: 0.3vh;
         height: 2.8vh;
         min-width: 3px;
         margin-left: -0.15vh;
-        background-color: rgba(255, 0, 0, 0.15);
+        background-color: rgba(255, 0, 0, 0.2);
       }
 
       li.tick-container {
@@ -107,7 +122,7 @@ export default {
         justify-content: center;
         width: 0.4vh;
         height: 2vh;
-        margin-right: 2vh;
+        margin-right: 1.8vh;
 
         &:last-child {
           margin-right: 0;

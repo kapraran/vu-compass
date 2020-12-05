@@ -1,4 +1,3 @@
 Config = {
-  ['position'] = 'top',
-  ['width'] = '100vh'
+  ['position'] = 'top' -- top, bottom
 }

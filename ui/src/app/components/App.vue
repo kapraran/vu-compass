@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Compass :enabled="enabled" :yaw="yaw"></Compass>
+    <Compass :enabled="enabled" :yaw="yaw" :bottom="bottom"></Compass>
   </div>
 </template>
 
