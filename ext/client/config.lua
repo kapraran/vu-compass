@@ -1,3 +1,4 @@
 Config = {
-  ['position'] = 'top' -- top, bottom
+  ['position'] = 'top', -- top, bottom
+  ['indicator'] = 'arrow' -- arrow, needle
 }

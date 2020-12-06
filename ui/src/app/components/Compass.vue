@@ -1,5 +1,5 @@
 <template>
-  <div :class="['compass-widget', { bottom: bottom }]" v-if="enabled">
+  <div :class="['compass-widget', indicator, { bottom }]" v-if="enabled">
     <div class="compass-container">
       <ul class="tick-strip">
         <li
@@ -26,6 +26,7 @@ export default {
     enabled: Boolean,
     bottom: Boolean,
     yaw: Number,
+    indicator: String,
   },
 
   data() {
@@ -75,6 +76,8 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+$arrow-sz: 0.6vh;
+
 .compass-widget {
   display: flex;
   justify-content: center;
@@ -94,6 +97,23 @@ export default {
         transform: translateY(-1.2vh) !important;
       }
     }
+
+    &.arrow .compass-container ul.tick-strip:before {
+      border-top: $arrow-sz solid #fff;
+      border-bottom: none;
+      transform: translate(-$arrow-sz, -2vh);
+    }
+  }
+
+  &.arrow .compass-container ul.tick-strip:before {
+    border-left: $arrow-sz solid transparent;
+    border-right: $arrow-sz solid transparent;
+    border-bottom: $arrow-sz solid #fff;
+    background-color: transparent;
+    transform: translate(-$arrow-sz, 0.6vh);
+    width: 0;
+    min-width: auto;
+    margin-left: 0;
   }
 
   .compass-container {

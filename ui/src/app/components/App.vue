@@ -1,6 +1,11 @@
 <template>
   <div id="app">
-    <Compass :enabled="enabled" :yaw="yaw" :bottom="bottom"></Compass>
+    <Compass
+      :enabled="enabled"
+      :yaw="yaw"
+      :bottom="bottom"
+      :indicator="indicator"
+    ></Compass>
   </div>
 </template>
 

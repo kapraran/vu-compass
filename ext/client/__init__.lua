@@ -2,13 +2,19 @@ require('config')
 require('utils')
 require('ui')
 
+-- todo some validation
 function SyncConfig()
   local isBottom = false
   if Config.position == 'bottom' then
     isBottom = true
   end
-
   WebUI:ExecuteJS(string.format('vext.setBottom(%s)', tostring(isBottom)))
+
+  local indicator = 'needle'
+  if Config.indicator == 'arrow' then
+    indicator = 'arrow'
+  end
+  WebUI:ExecuteJS(string.format('vext.setIndicator("%s")', indicator))
 end
 
 -- this event can be used from other mods to update compass' config
