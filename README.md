@@ -1,4 +1,4 @@
-![](./assets/vu-ccompass.small.png)
+![vu-compass](./assets/vu-ccompass.small.png)
 
 # vu-compass
 A compass ui-mod for Venice Unleashed
@@ -18,3 +18,9 @@ Events:Dispatch('Compass:Config', {
   ['position'] = 'bottom'
 })
 ```
+
+### Warzone Compass
+
+![vu-compass warzone](./assets/vu-ccompass.warzone.small.png)
+
+I also added a Warzone styled compass as a *bonus*. It doesn't support the config options and you can only use it by enabling it in the App component and compiling the ui by yourself.
