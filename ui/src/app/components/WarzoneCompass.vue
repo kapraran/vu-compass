@@ -17,7 +17,7 @@
       </ul>
 
       <div class="indicator">
-        {{ yaw }}
+        {{ bigLabel(yaw) }}
       </div>
     </div>
   </div>
@@ -51,6 +51,16 @@ export default {
       return deg % 45 === 0 ? degLabels[deg / 45] : deg;
     },
 
+    bigLabel(deg) {
+      const mod = deg % 45
+      console.log(deg, mod)
+      if (mod >= 40 || mod <= 5) {
+        deg -= mod <= 5 ? mod: mod - 45
+      }
+
+      return this.label(deg)
+    },
+
     // tickScale(i) {
     //   const diff = Math.floor(Math.abs(i - this.visibleTicks/2))
     //   return `scale(${1 + (((Math.floor(this.visibleTicks/2) + 1) - diff) * 0.12)})`
@@ -76,8 +86,7 @@ export default {
         Math.floor(
           (this.yaw - Math.floor(this.visibleTicks / 2) * this.step) / this.step
         ) *
-          this.step +
-        this.step;
+          this.step;
       return new Array(this.visibleTicks)
         .fill(0)
         .map((v, i) => initAngle + i * this.step)
@@ -129,16 +138,16 @@ $arrow-sz: 0.6vh;
 
         .tick {
           width: 0.1vh;
-          min-width: 2px;
-          height: 0.3vh;
+          min-width: 3px;
+          height: 0.6vh;
           background-color: rgba(255, 255, 255, 0.64);
           box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
         }
 
         &.full .tick {
-          height: 0.6vh;
-          min-width: 3px;
-          width: 0.15vh;
+          // height: 0.6vh;
+          // min-width: 3px;
+          // width: 0.15vh;
           background-color: #fff;
         }
 
@@ -178,9 +187,9 @@ $arrow-sz: 0.6vh;
       width: 5vh;
       padding: 0.25vh 0;
       text-align: center;
-      border-left: 0.2vh solid rgba(255, 255, 255, 0.75);
-      border-right: 0.2vh solid rgba(255, 255, 255, 0.75);
-      color: orange;
+      border-left: 0.2vh solid #e7e7dd;
+      border-right: 0.2vh solid #e7e7dd;
+      color: #fca94b;
       font-size: 2.2vh;
       font-weight: 700;
       text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75);
