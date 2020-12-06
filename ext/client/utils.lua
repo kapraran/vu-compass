@@ -18,5 +18,5 @@ end
 
 local __r2dc = 180/math.pi
 function rad2deg(rad)
-  return __r2dc * rad
+  return math.floor(__r2dc * rad)
 end
