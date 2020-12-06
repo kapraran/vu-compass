@@ -53,8 +53,8 @@ export default {
     ticksList() {
       const initAngle =
         Math.floor(
-          (this.yaw - Math.floor(this.visibleTicks / 2) * this.step) / 5
-        ) * 5;
+          (this.yaw - Math.floor(this.visibleTicks / 2) * this.step) / this.step
+        ) * this.step;
       return new Array(this.visibleTicks)
         .fill(0)
         .map((v, i) => initAngle + i * this.step)

@@ -1,12 +1,12 @@
 <template>
   <div id="app">
-    <!-- <Compass
+    <Compass
       :enabled="enabled"
       :yaw="yaw"
       :bottom="bottom"
       :indicator="indicator"
-    ></Compass> -->
-    <WarzoneCompass :enabled="enabled" :yaw="yaw"></WarzoneCompass>
+    ></Compass>
+    <!-- <WarzoneCompass :enabled="enabled" :yaw="yaw"></WarzoneCompass> -->
   </div>
 </template>
 
