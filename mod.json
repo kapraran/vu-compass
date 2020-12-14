@@ -5,6 +5,7 @@
   "Version": "1.0.1",
   "HasVeniceEXT": true,
   "HasWebUI": true,
+  "Tags": ["compass"],
   "Dependencies": {
     "veniceext": "^1.0.0"
   }
