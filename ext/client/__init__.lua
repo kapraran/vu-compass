@@ -42,12 +42,10 @@ Events:Subscribe('UI:DrawHud', function()
   uiEnabled:Update(isHud and true)
 
   -- get yaw
-  local yaw = player.input.authoritativeAimingYaw
-  if player.inVehicle then
-    yaw = player.soldier.authoritativeYaw
-  end
+  local camera = ClientUtils:GetCameraTransform()
+  local yaw = MathUtils:GetYPRFromULF(camera.up, camera.left, camera.forward).x
 
   -- convert to degrees and display it
-  local yawDeg = rad2deg(yaw)
+  local yawDeg = rad2deg(2 * math.pi - yaw)
   uiYaw:Update(yawDeg)
 end)
