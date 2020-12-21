@@ -7,10 +7,10 @@ Hooks:Install('UI:PushScreen', 999, function(hook, screen, graphPriority, parent
 
   -- only for debug
   -- print(screen.name)
-  if screen.name == 'UI/Flow/Screen/PreRoundWaitingScreen' then
-    hook:Return(nil)
-    return
-  end
+  -- if screen.name == 'UI/Flow/Screen/PreRoundWaitingScreen' then
+  --   hook:Return(nil)
+  --   return
+  -- end
 
   if screen.name == 'UI/Flow/Screen/IngameMenuMP' or
      screen.name == 'UI/Flow/Screen/SpawnScreenPC' then
