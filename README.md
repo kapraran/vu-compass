@@ -23,4 +23,4 @@ Events:Dispatch('Compass:Config', {
 
 ![vu-compass warzone](./assets/vu-ccompass.warzone.small.png)
 
-I also added a Warzone styled compass as a *bonus*. It doesn't support the config options and you can only use it by enabling it in the App component and compiling the ui by yourself.
+I also added a Warzone styled compass as a *bonus*. You can use it by downloading the contents of the [warzone branch](https://github.com/kapraran/vu-compass/tree/warzone). It doesn't support any config option though.
