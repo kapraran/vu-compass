@@ -7,8 +7,9 @@
             :class="tickClasses(tick)"
             :style="{
               transform: ticksTranslateX,
+              opacity: tickOpacity(i)
             }"
-            v-for="tick in ticksList"
+            v-for="(tick, i) in ticksList"
             :key="tick"
           >
             <div class="tick"></div>
@@ -34,7 +35,7 @@ export default {
   data() {
     return {
       step: 5,
-      visibleTicks: 23,
+      visibleTicks: 25,
     };
   },
 
@@ -49,6 +50,11 @@ export default {
     label(deg) {
       return deg % 45 === 0 ? degLabels[deg / 45] : deg;
     },
+
+    tickOpacity(i) {
+      const j = Math.min(i, this.visibleTicks - i - 1)
+      return Math.min(1, j * 0.20)
+    }
   },
 
   computed: {
@@ -65,7 +71,7 @@ export default {
 
     ticksTranslateX() {
       const left = this.yaw % this.step;
-      const offset = (left / this.step) * 1.6;
+      const offset = (left / this.step) * 1.8;
       return `TranslateX(-${offset}vh)`;
     },
   },
@@ -74,7 +80,7 @@ export default {
 
 <style lang="scss" scoped>
 $arrow-sz: 0.4vh;
-$overflow-container-width: 39vh;
+$overflow-container-width: 44vh;
 
 @keyframes weird-chromium-glitch {
   0%   { max-width: $overflow-container-width; }
@@ -103,6 +109,10 @@ $overflow-container-width: 39vh;
   &.bottom {
     bottom: 0;
     top: auto;
+
+    .compass-overflow-container {
+      align-items: flex-end;
+    }
 
     li.tick-container {
       align-items: flex-end;
@@ -156,7 +166,7 @@ $overflow-container-width: 39vh;
         justify-content: center;
         width: 0.4vh;
         height: 2vh;
-        margin-right: 1.6vh;
+        margin-right: 1.8vh;
 
         &:last-child {
           margin-right: 0;
