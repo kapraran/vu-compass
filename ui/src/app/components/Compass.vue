@@ -78,8 +78,8 @@ $overflow-container-width: 39vh;
 
 @keyframes weird-chromium-glitch {
   0%   { max-width: $overflow-container-width; }
-  96%  { max-width: $overflow-container-width; }
-  100%  { max-width: $overflow-container-width + 1vh; }
+  99%  { max-width: $overflow-container-width; }
+  100%  { max-width: $overflow-container-width + 0.25vh; }
 }
 
 .compass-widget {
