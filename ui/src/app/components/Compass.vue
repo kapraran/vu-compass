@@ -1,19 +1,21 @@
 <template>
   <div :class="['compass-widget', indicator, { bottom }]" v-if="enabled">
-    <div class="compass-container">
-      <ul class="tick-strip">
-        <li
-          :class="tickClasses(tick)"
-          :style="{
-            transform: ticksTranslateX,
-          }"
-          v-for="tick in ticksList"
-          :key="tick"
-        >
-          <div class="tick"></div>
-          <span>{{ label(tick) }}</span>
-        </li>
-      </ul>
+    <div class="compass-overflow-container">
+      <div class="compass-container">
+        <ul class="tick-strip">
+          <li
+            :class="tickClasses(tick)"
+            :style="{
+              transform: ticksTranslateX,
+            }"
+            v-for="tick in ticksList"
+            :key="tick"
+          >
+            <div class="tick"></div>
+            <span>{{ label(tick) }}</span>
+          </li>
+        </ul>
+      </div>
     </div>
   </div>
 </template>
@@ -63,7 +65,7 @@ export default {
 
     ticksTranslateX() {
       const left = this.yaw % this.step;
-      const offset = (left / this.step) * 1.8;
+      const offset = (left / this.step) * 1.6;
       return `TranslateX(-${offset}vh)`;
     },
   },
@@ -71,7 +73,14 @@ export default {
 </script>
 
 <style lang="scss" scoped>
-$arrow-sz: 0.6vh;
+$arrow-sz: 0.4vh;
+$overflow-container-width: 39vh;
+
+@keyframes weird-chromium-glitch {
+  0%   { max-width: $overflow-container-width; }
+  96%  { max-width: $overflow-container-width; }
+  100%  { max-width: $overflow-container-width + 1vh; }
+}
 
 .compass-widget {
   display: flex;
@@ -80,6 +89,16 @@ $arrow-sz: 0.6vh;
   top: 0;
   left: 0;
   right: 0;
+
+  .compass-overflow-container {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    height: 10vh;
+    overflow: hidden;
+    max-width: $overflow-container-width; // make it dynamic
+    animation: weird-chromium-glitch 4s infinite;
+  }
 
   &.bottom {
     bottom: 0;
@@ -94,7 +113,7 @@ $arrow-sz: 0.6vh;
     }
 
     &.arrow .compass-container ul.tick-strip:before {
-      border-top: $arrow-sz solid #fff;
+      border-top: $arrow-sz solid rgba(255, 255, 255, 0.72);
       border-bottom: none;
       transform: translate(-$arrow-sz, -2vh);
     }
@@ -137,7 +156,7 @@ $arrow-sz: 0.6vh;
         justify-content: center;
         width: 0.4vh;
         height: 2vh;
-        margin-right: 1.8vh;
+        margin-right: 1.6vh;
 
         &:last-child {
           margin-right: 0;
@@ -147,7 +166,7 @@ $arrow-sz: 0.6vh;
           width: 0.1vh;
           min-width: 2px;
           height: 0.3vh;
-          background-color: rgba(255, 255, 255, 0.64);
+          background-color: rgba(255, 255, 255, 0.32);
           box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
         }
 
@@ -155,7 +174,7 @@ $arrow-sz: 0.6vh;
           height: 0.6vh;
           min-width: 3px;
           width: 0.15vh;
-          background-color: #fff;
+          background-color: rgba(255, 255, 255, 0.64);
         }
 
         span {
@@ -166,7 +185,7 @@ $arrow-sz: 0.6vh;
           transform: translateY(1.2vh);
           font-weight: 400;
           color: #fff;
-          letter-spacing: 0.2vh;
+          letter-spacing: 0;
           text-shadow: 0 0 4px rgba(0, 0, 0, 0.32);
           z-index: 999;
         }
@@ -176,9 +195,14 @@ $arrow-sz: 0.6vh;
           display: block;
         }
 
+        &.semi span {
+          color: rgba(252, 255, 228, 0.72);
+          letter-spacing: 0.1vh;
+        }
+
         &.full span {
-          font-size: 1.7vh;
-          color: rgb(252, 255, 228);
+          font-size: 1.6vh;
+          color: rgba(252, 255, 228, 0.84);
           font-weight: 700;
         }
       }

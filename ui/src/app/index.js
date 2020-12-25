@@ -10,5 +10,5 @@ if (typeof WebUI === "undefined") {
   document.body.style.backgroundColor = "green";
   vext.setEnabled(true);
   // vext.setBottom(true);
-  // vext.setIndicator("arrow");
+  vext.setIndicator("arrow");
 }
