@@ -17,14 +17,18 @@ function SyncConfig()
   WebUI:ExecuteJS(string.format('vext.setIndicator("%s")', indicator))
 end
 
--- this event can be used from other mods to update compass' config
-Events:Subscribe('Compass:Config', function(userConfig)
+--
+function OnConfigReceived(userConfig)
   for k, v in pairs(userConfig) do
     Config[k] = v
   end
 
   SyncConfig()
-end)
+end
+
+-- use other mods or RCON to update compass' config
+Events:Subscribe('Compass:Config', OnConfigReceived)
+NetEvents:Subscribe('Compass:Config-Net', OnConfigReceived)
 
 Events:Subscribe('Extension:Loaded', function()
   WebUI:Init()

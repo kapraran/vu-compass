@@ -2,12 +2,11 @@
   <div :class="['compass-widget', indicator, { bottom }]" v-if="enabled">
     <div class="compass-overflow-container">
       <div class="compass-container">
-        <ul class="tick-strip">
+        <ul class="tick-strip" :style="{ transform: ticksTranslateX }">
           <li
             :class="tickClasses(tick)"
             :style="{
-              transform: ticksTranslateX,
-              opacity: tickOpacity(i)
+              opacity: tickOpacity(i),
             }"
             v-for="(tick, i) in ticksList"
             :key="tick"
@@ -52,9 +51,9 @@ export default {
     },
 
     tickOpacity(i) {
-      const j = Math.min(i, this.visibleTicks - i - 1)
-      return Math.min(1, j * 0.20)
-    }
+      const j = Math.min(i, this.visibleTicks - i - 1);
+      return Math.min(1, j * 0.2);
+    },
   },
 
   computed: {
@@ -80,12 +79,18 @@ export default {
 
 <style lang="scss" scoped>
 $arrow-sz: 0.4vh;
-$overflow-container-width: 44vh;
+$overflow-container-width: 47vh;
 
 @keyframes weird-chromium-glitch {
-  0%   { max-width: $overflow-container-width; }
-  99%  { max-width: $overflow-container-width; }
-  100%  { max-width: $overflow-container-width + 0.25vh; }
+  0% {
+    max-width: $overflow-container-width;
+  }
+  99% {
+    max-width: $overflow-container-width;
+  }
+  100% {
+    max-width: $overflow-container-width + 0.25vh;
+  }
 }
 
 .compass-widget {
@@ -97,6 +102,7 @@ $overflow-container-width: 44vh;
   right: 0;
 
   .compass-overflow-container {
+    position: relative;
     display: flex;
     justify-content: center;
     align-items: flex-start;
@@ -104,6 +110,19 @@ $overflow-container-width: 44vh;
     overflow: hidden;
     max-width: $overflow-container-width; // make it dynamic
     animation: weird-chromium-glitch 4s infinite;
+
+    &:before {
+      content: "";
+      position: absolute;
+      z-index: 0;
+      left: 50%;
+      top: 0;
+      width: 0.3vh;
+      height: 2.8vh;
+      min-width: 3px;
+      margin-left: -0.15vh;
+      background-color: rgba(255, 0, 0, 0.2);
+    }
   }
 
   &.bottom {
@@ -112,6 +131,10 @@ $overflow-container-width: 44vh;
 
     .compass-overflow-container {
       align-items: flex-end;
+
+      &:before {
+        top: auto;
+      }
     }
 
     li.tick-container {
@@ -122,14 +145,14 @@ $overflow-container-width: 44vh;
       }
     }
 
-    &.arrow .compass-container ul.tick-strip:before {
+    &.arrow .compass-overflow-container:before {
       border-top: $arrow-sz solid rgba(255, 255, 255, 0.72);
       border-bottom: none;
-      transform: translate(-$arrow-sz, -2vh);
+      transform: translate(-$arrow-sz, -0.6vh);
     }
   }
 
-  &.arrow .compass-container ul.tick-strip:before {
+  &.arrow .compass-overflow-container:before {
     border-left: $arrow-sz solid transparent;
     border-right: $arrow-sz solid transparent;
     border-bottom: $arrow-sz solid #fff;
@@ -147,19 +170,6 @@ $overflow-container-width: 44vh;
       margin: 0;
       display: flex;
 
-      &:before {
-        content: "";
-        position: absolute;
-        z-index: 0;
-        left: 50%;
-        top: 0;
-        width: 0.3vh;
-        height: 2.8vh;
-        min-width: 3px;
-        margin-left: -0.15vh;
-        background-color: rgba(255, 0, 0, 0.2);
-      }
-
       li.tick-container {
         position: relative;
         display: flex;
@@ -176,7 +186,7 @@ $overflow-container-width: 44vh;
           width: 0.1vh;
           min-width: 2px;
           height: 0.3vh;
-          background-color: rgba(255, 255, 255, 0.32);
+          background-color: rgba(255, 255, 255, 0.36);
           box-shadow: 0 0 4px rgba(0, 0, 0, 0.24);
         }
 
@@ -206,7 +216,7 @@ $overflow-container-width: 44vh;
         }
 
         &.semi span {
-          color: rgba(252, 255, 228, 0.72);
+          color: rgba(252, 255, 228, 0.76);
           letter-spacing: 0.1vh;
         }
 

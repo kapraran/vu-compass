@@ -11,9 +11,12 @@ The compass widget that we all know and love 😜 from games like PR, PUBG, Squa
 
 ### Config
 
-You can check the `config.lua` file for the available config options. You can directly change the config file or you can dispatch an event from another mod, passing your preferred values.
-
+You can check the `ext/client/config.lua` file for the available config options. You can changes those options:
+1. by directly changing the config file
+2. using the RCON commands `compass.SetPosition` and `compass.SetIndicator`
+3. by dispatching an event from another mod, passing your preferred values
 ```lua
+-- update the config from another mod example
 Events:Dispatch('Compass:Config', {
   ['position'] = 'bottom'
 })
