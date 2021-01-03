@@ -2,12 +2,14 @@ export const state = {
   enabled: false,
   yaw: 0,
   bottom: false,
-  indicator: "needle",
+  indicator: "arrow",
+  showDegrees: true
 };
 
 export const vext = {
-  setEnabled: (enabled) => (state.enabled = enabled),
+  enable: (enabled) => (state.enabled = enabled),
   setYaw: (yaw) => (state.yaw = yaw),
   setBottom: (bottom) => (state.bottom = bottom),
   setIndicator: (indicator) => (state.indicator = indicator),
+  showDegrees: (showDegrees) => (state.showDegrees = showDegrees)
 };

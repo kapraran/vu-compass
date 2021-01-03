@@ -1,5 +1,7 @@
+require('utils')
+
+uiEnabled = CachedJsExecutor('vext.enable', false)
 uiYaw = CachedJsExecutor('vext.setYaw', 0)
-uiEnabled = CachedJsExecutor('vext.setEnabled', false)
 isHud = false
 isKilled = false
 
@@ -7,7 +9,6 @@ Hooks:Install('UI:PushScreen', 999, function(hook, screen, graphPriority, parent
   local screen = UIGraphAsset(screen)
 
   -- only for debug
-  -- print(screen.name)
   -- if screen.name == 'UI/Flow/Screen/PreRoundWaitingScreen' then
   --   hook:Return(nil)
   --   return
@@ -23,7 +24,7 @@ Hooks:Install('UI:PushScreen', 999, function(hook, screen, graphPriority, parent
     uiEnabled:Update(true)
     isHud = true
   end
-  
+
   if screen.name == 'UI/Flow/Screen/KillScreen' then
     isKilled = true
   end

@@ -1,6 +1,7 @@
 <template>
   <div :class="['compass-widget', indicator, { bottom }]" v-if="enabled">
     <div class="compass-overflow-container">
+      <span class="current-yaw" v-if="showDegrees">{{ yawNum }}</span>
       <div class="compass-container">
         <ul class="tick-strip" :style="{ transform: ticksTranslateX }">
           <li
@@ -29,6 +30,7 @@ export default {
     bottom: Boolean,
     yaw: Number,
     indicator: String,
+    showDegrees: Boolean
   },
 
   data() {
@@ -52,7 +54,7 @@ export default {
 
     tickOpacity(i) {
       const j = Math.min(i, this.visibleTicks - i - 1);
-      return Math.min(1, j * 0.2);
+      return Math.min(1, j * 0.22);
     },
   },
 
@@ -73,13 +75,17 @@ export default {
       const offset = (left / this.step) * 1.8;
       return `TranslateX(-${offset}vh)`;
     },
+
+    yawNum() {
+      return this.yaw <= 359 ? this.yaw: 0
+    }
   },
 };
 </script>
 
 <style lang="scss" scoped>
 $arrow-sz: 0.4vh;
-$overflow-container-width: 47vh;
+$overflow-container-width: 48vh;
 
 @keyframes weird-chromium-glitch {
   0% {
@@ -111,6 +117,18 @@ $overflow-container-width: 47vh;
     max-width: $overflow-container-width; // make it dynamic
     animation: weird-chromium-glitch 4s infinite;
 
+    span.current-yaw {
+      position: absolute;
+      left: 50%;
+      transform: translate(-5vh, 4.2vh);
+      width: 10vh;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.56);
+      font-size: 1.35vh;
+      text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
+      letter-spacing: 0.15vh;
+    }
+
     &:before {
       content: "";
       position: absolute;
@@ -134,6 +152,10 @@ $overflow-container-width: 47vh;
 
       &:before {
         top: auto;
+      }
+
+      span.current-yaw {
+        transform: translate(-5vh, -4.2vh);
       }
     }
 
@@ -206,7 +228,7 @@ $overflow-container-width: 47vh;
           font-weight: 400;
           color: #fff;
           letter-spacing: 0;
-          text-shadow: 0 0 4px rgba(0, 0, 0, 0.32);
+          text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
           z-index: 999;
         }
 
@@ -221,7 +243,7 @@ $overflow-container-width: 47vh;
         }
 
         &.full span {
-          font-size: 1.6vh;
+          font-size: 1.7vh;
           color: rgba(252, 255, 228, 0.84);
           font-weight: 700;
         }

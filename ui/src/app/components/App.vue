@@ -5,6 +5,7 @@
       :yaw="yaw"
       :bottom="bottom"
       :indicator="indicator"
+      :showDegrees="showDegrees"
     ></Compass>
     <!-- <WarzoneCompass :enabled="enabled" :yaw="yaw"></WarzoneCompass> -->
   </div>

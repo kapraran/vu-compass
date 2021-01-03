@@ -10,8 +10,9 @@ window.vext = vext;
 // setInterval(() => {
 //   if (typeof WebUI === "undefined") {
 //     document.body.style.backgroundColor = "green";
-//     vext.setEnabled(true);
+//     vext.enable(true);
 //     vext.setBottom(true);
+//     vext.showDegrees(true);
 //     vext.setIndicator("arrow");
 //   }
 // }, 1000)
