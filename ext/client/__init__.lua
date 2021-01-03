@@ -39,8 +39,12 @@ Events:Subscribe('UI:DrawHud', function()
   -- get player
   local player = PlayerManager:GetLocalPlayer()
   if player == nil or player.soldier == nil then
-    uiEnabled:Update(false)
-    return
+    if isKilled then
+      uiEnabled:Update(false)
+      return
+    end
+  else
+    isKilled = false
   end
 
   uiEnabled:Update(isHud and true)

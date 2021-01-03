@@ -1,6 +1,7 @@
 uiYaw = CachedJsExecutor('vext.setYaw', 0)
 uiEnabled = CachedJsExecutor('vext.setEnabled', false)
 isHud = false
+isKilled = false
 
 Hooks:Install('UI:PushScreen', 999, function(hook, screen, graphPriority, parentGraph)
   local screen = UIGraphAsset(screen)
@@ -21,5 +22,9 @@ Hooks:Install('UI:PushScreen', 999, function(hook, screen, graphPriority, parent
   if screen.name == 'UI/Flow/Screen/HudMPScreen' then
     uiEnabled:Update(true)
     isHud = true
+  end
+  
+  if screen.name == 'UI/Flow/Screen/KillScreen' then
+    isKilled = true
   end
 end)

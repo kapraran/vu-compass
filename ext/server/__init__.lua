@@ -1,3 +1,5 @@
+require('updateCheck')
+
 RCON:RegisterCommand('compass.SetPosition', RemoteCommandFlag.RequiresLogin, function(command, args, loggedIn)
   local position = args[1]
 
