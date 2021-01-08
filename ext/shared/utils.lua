@@ -1,12 +1,27 @@
+g_Version = '1.2.0'
+g_IsDebug = false
+
+g_2PI = 2 * math.pi
+g_R2DC = 180 / math.pi
+
+-- The valid values for each config option
 local validConfigOptions = {
   ['position'] = {'top', 'bottom'},
-  ['indicator'] = {'arrow', 'needle'}
+  ['indicator'] = {'arrow', 'needle'},
+  ['showDegrees'] = {'true', 'false'}
 }
 
+-- First letter to uppercase
 function firstToUpper(str)
   return (str:gsub("^%l", string.upper))
 end
 
+-- Converts rads to degrees
+function rad2deg(rad)
+  return math.floor(g_R2DC * rad)
+end
+
+-- Searches a table for a certain value
 function table.indexOf(t, object)
   if type(t) ~= "table" then error("table expected, got " .. type(t), 2) end
 
@@ -17,17 +32,13 @@ function table.indexOf(t, object)
   end
 end
 
+-- Checks if a config value for a certain option is valid
 function IsValidConfigValue(option, value)
+  -- make sure showDegrees is a string
   if option == 'showDegrees' then
-    local str = tostring(value):lower()
-    return str == 'true' or str == 'false'
+    value = tostring(value):lower()
   end
 
-  return table.indexOf(validConfigOptions[option], value) ~= nil
-
-  -- if table.indexOf(validConfigOptions[option], value) then
-  --   return value
-  -- else
-  --   return validConfigOptions[option][1]
-  -- end
+  -- check if option exists and value is valid
+  return validConfigOptions[option] ~= nil and table.indexOf(validConfigOptions[option], value) ~= nil
 end

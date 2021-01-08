@@ -2,7 +2,7 @@
   "Name": "VuCompass",
   "Authors": ["breaknix"],
   "Description": "A compass ui-mod for Venice Unleashed",
-  "Version": "1.1.0",
+  "Version": "1.2.0",
   "HasVeniceEXT": true,
   "HasWebUI": true,
   "Tags": ["compass"],

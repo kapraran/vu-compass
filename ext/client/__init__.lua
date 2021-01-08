@@ -1,73 +1,117 @@
 require('config')
-require('ui')
-require('utils')
+require('CachedJsExecutor')
 require('__shared/utils')
 
--- syncs the config options with the UI
-function SyncConfig()
-  -- position
-  local isBottom = false
-  if Config.position == 'bottom' then
-    isBottom = true
-  end
-  WebUI:ExecuteJS(string.format('vext.setBottom(%s)', tostring(isBottom)))
+local CompassClient = class('CompassClient')
 
-  -- indicator
-  local indicator = 'arrow'
-  if Config.indicator == 'needle' then
-    indicator = 'needle'
-  end
-  WebUI:ExecuteJS(string.format('vext.setIndicator("%s")', indicator))
-
-  -- showDegrees
-  local showDegrees = not (not Config.showDegrees)
-  WebUI:ExecuteJS(string.format('vext.showDegrees(%s)', tostring(showDegrees)))
+function CompassClient:__init()
+  self:RegisterVars()
+  self:RegisterEvents()
 end
 
--- syncs the config options that are received from 
--- other mods or RCON
-function OnConfigReceived(userConfig)
+function CompassClient:RegisterVars()
+  self.uiEnabled = CachedJsExecutor('vext.enable(%s)', false)
+  self.uiYaw = CachedJsExecutor('vext.setYaw(%s)', 0)
+  self.IsKilled = false
+  self.IsHudOn = false
+end
+
+function CompassClient:RegisterEvents()
+  Events:Subscribe('Extension:Loaded', self, self.OnExtensionLoaded)
+  Events:Subscribe('UI:DrawHud', self, self.OnDrawHud)
+  Events:Subscribe('Compass:Config', self, self.OnConfigReceived)
+  NetEvents:Subscribe('Compass:Config-Net', self, self.OnConfigReceived)
+  Hooks:Install('UI:PushScreen', 999, self, self.OnPushScreen)
+end
+
+-- Validates and syncs config options with the WebUI
+function CompassClient:SyncConfig()
+  -- position
+  if not IsValidConfigValue('position', Config.position) then
+    Config.position = 'top'
+  end
+  WebUI:ExecuteJS(string.format('vext.setBottom(%s)', tostring(Config.position == 'bottom')))
+
+  -- indicator
+  if not IsValidConfigValue('indicator', Config.indicator) then
+    Config.indicator = 'arrow'
+  end
+  WebUI:ExecuteJS(string.format('vext.setIndicator("%s")', Config.indicator))
+
+  -- showDegrees
+  Config.showDegrees = not (not Config.showDegrees)
+  WebUI:ExecuteJS(string.format('vext.showDegrees(%s)', tostring(Config.showDegrees)))
+end
+
+-- Validates & syncs the config options that are received from other mods or RCON
+function CompassClient:OnConfigReceived(userConfig)
+  -- validate each passed option
   for option, value in pairs(userConfig) do
     if IsValidConfigValue(option, value) then
       Config[option] = value
     end
   end
 
-  SyncConfig()
+  self:SyncConfig()
 end
 
--- draw compass
-function OnDrawHud()
+function CompassClient:OnExtensionLoaded()
+  WebUI:Init()
+  self:SyncConfig()
+end
+
+function CompassClient:OnDrawHud()
   -- get player
   local player = PlayerManager:GetLocalPlayer()
-  if player == nil or player.soldier == nil then
-    if isKilled then
-      uiEnabled:Update(false)
+  if (player == nil or player.soldier == nil) then
+    if self.IsKilled then
+      self.uiEnabled:Update(false)
       return
     end
   else
-    isKilled = false
+    self.IsKilled = false
   end
 
-  uiEnabled:Update(isHud and true)
+  if self.IsHudOn then
+    self.uiEnabled:Update(true)
 
-  -- get yaw
-  local camera = ClientUtils:GetCameraTransform()
-  local yaw = MathUtils:GetYPRFromULF(camera.up, camera.left, camera.forward).x
+    -- get yaw
+    local camera = ClientUtils:GetCameraTransform()
+    local yawRad = MathUtils:GetYPRFromULF(camera.up, camera.left, camera.forward).x
 
-  -- convert to degrees and display it
-  local yawDeg = rad2deg(2 * math.pi - yaw)
-  uiYaw:Update(yawDeg)
+    -- convert to degrees and display it
+    self.uiYaw:Update(rad2deg(g_2PI - yawRad))
+  else
+    self.uiEnabled:Update(false)
+  end
 end
 
--- 
-function OnExtensionLoaded()
-  WebUI:Init()
-  SyncConfig()
+function CompassClient:OnPushScreen(hook, screen, graphPriority, parentGraph)
+  local screen = UIGraphAsset(screen)
+
+  -- only for debug
+  if g_IsDebug then
+    print(screen.name)
+
+    if screen.name == 'UI/Flow/Screen/PreRoundWaitingScreen' then
+      hook:Return(nil)
+    end
+  end
+
+  if screen.name == 'UI/Flow/Screen/IngameMenuMP' or
+     screen.name == 'UI/Flow/Screen/SpawnScreenPC' then
+    self.uiEnabled:Update(false)
+    self.IsHudOn = false
+  end
+
+  if screen.name == 'UI/Flow/Screen/HudMPScreen' then
+    self.uiEnabled:Update(true)
+    self.IsHudOn = true
+  end
+
+  if screen.name == 'UI/Flow/Screen/KillScreen' then
+    self.IsKilled = true
+  end
 end
 
--- register events
-Events:Subscribe('Extension:Loaded', OnExtensionLoaded)
-Events:Subscribe('UI:DrawHud', OnDrawHud)
-Events:Subscribe('Compass:Config', OnConfigReceived)
-NetEvents:Subscribe('Compass:Config-Net', OnConfigReceived)
+CompassClient()

@@ -1,8 +1,10 @@
 -- Code from https://gitlab.com/n4gi0s/vu-mapvote by N4gi0s
 -- Modified for general use by GreatApo
 
+require('__shared/utils')
+
 -- Add current mod version
-local localModVersion = "1.0.6" --temp fix, waiting for API to get version from mod.json
+local localModVersion = g_Version --temp fix, waiting for API to get version from mod.json
 
 -- Project URL
 local projectURL = "https://github.com/kapraran/vu-compass"
