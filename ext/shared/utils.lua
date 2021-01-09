@@ -2,6 +2,7 @@ g_Version = '1.2.0'
 g_IsDebug = false
 
 g_2PI = 2 * math.pi
+g_PI2 = math.pi / 2
 g_R2DC = 180 / math.pi
 
 -- The valid values for each config option
@@ -10,6 +11,11 @@ local validConfigOptions = {
   ['indicator'] = {'arrow', 'needle'},
   ['showDegrees'] = {'true', 'false'}
 }
+
+-- Returns the yaw from the forward vector
+function YawFromForward(forward)
+  return (math.atan(forward.z, forward.x) + g_PI2) % g_2PI;
+end
 
 -- First letter to uppercase
 function firstToUpper(str)

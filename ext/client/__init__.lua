@@ -12,16 +12,25 @@ end
 function CompassClient:RegisterVars()
   self.uiEnabled = CachedJsExecutor('vext.enable(%s)', false)
   self.uiYaw = CachedJsExecutor('vext.setYaw(%s)', 0)
-  self.IsKilled = false
-  self.IsHudOn = false
+
+  self.isHudOn = false
+  self.isKillScreen = false
 end
 
 function CompassClient:RegisterEvents()
   Events:Subscribe('Extension:Loaded', self, self.OnExtensionLoaded)
   Events:Subscribe('UI:DrawHud', self, self.OnDrawHud)
+  Events:Subscribe('Level:Loaded', self, self.ResetVars)
+  Events:Subscribe('Level:Destroy', self, self.ResetVars)
   Events:Subscribe('Compass:Config', self, self.OnConfigReceived)
-  NetEvents:Subscribe('Compass:Config-Net', self, self.OnConfigReceived)
+
   Hooks:Install('UI:PushScreen', 999, self, self.OnPushScreen)
+  NetEvents:Subscribe('Compass:Config-Net', self, self.OnConfigReceived)
+end
+
+function CompassClient:ResetVars()
+  self.isHudOn = false
+  self.isKillScreen = false
 end
 
 -- Validates and syncs config options with the WebUI
@@ -63,24 +72,21 @@ end
 function CompassClient:OnDrawHud()
   -- get player
   local player = PlayerManager:GetLocalPlayer()
-  if (player == nil or player.soldier == nil) then
-    if self.IsKilled then
-      self.uiEnabled:Update(false)
-      return
-    end
-  else
-    self.IsKilled = false
+
+  if player == nil or (player.soldier == nil and player.corpse == nil) then
+    self.uiEnabled:Update(false)
+    return
   end
 
-  if self.IsHudOn then
-    self.uiEnabled:Update(true)
+  if self.isHudOn then
+    self.uiEnabled:Update(not self.isKillScreen)
 
     -- get yaw
     local camera = ClientUtils:GetCameraTransform()
-    local yawRad = MathUtils:GetYPRFromULF(camera.up, camera.left, camera.forward).x
+    local yawRad = YawFromForward(camera.forward)
 
     -- convert to degrees and display it
-    self.uiYaw:Update(rad2deg(g_2PI - yawRad))
+    self.uiYaw:Update(rad2deg(yawRad))
   else
     self.uiEnabled:Update(false)
   end
@@ -98,19 +104,24 @@ function CompassClient:OnPushScreen(hook, screen, graphPriority, parentGraph)
     end
   end
 
-  if screen.name == 'UI/Flow/Screen/IngameMenuMP' or
-     screen.name == 'UI/Flow/Screen/SpawnScreenPC' then
-    self.uiEnabled:Update(false)
-    self.IsHudOn = false
-  end
-
   if screen.name == 'UI/Flow/Screen/HudMPScreen' then
     self.uiEnabled:Update(true)
-    self.IsHudOn = true
+    self.isHudOn = true
   end
 
   if screen.name == 'UI/Flow/Screen/KillScreen' then
-    self.IsKilled = true
+    self.isKillScreen = true
+  end
+
+  if screen.name == 'UI/Flow/Screen/IngameMenuMP' then
+    self.uiEnabled:Update(false)
+    self.isHudOn = false
+  end
+
+  if screen.name == 'UI/Flow/Screen/SpawnScreenPC' then
+    self.uiEnabled:Update(false)
+    self.isHudOn = false
+    self.isKillScreen = false
   end
 end
 
