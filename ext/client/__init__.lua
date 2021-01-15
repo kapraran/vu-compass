@@ -76,10 +76,14 @@ function CompassClient:OnDrawHud()
   if player == nil or (player.soldier == nil and player.corpse == nil) then
     self.uiEnabled:Update(false)
     return
+  elseif self.isKillScreen and player.soldier ~= nil then
+    self.isKillScreen = false
   end
 
   if self.isHudOn then
-    self.uiEnabled:Update(not self.isKillScreen)
+    if not self.uiEnabled:Update(not self.isKillScreen) then
+      return
+    end
 
     -- get yaw
     local camera = ClientUtils:GetCameraTransform()
