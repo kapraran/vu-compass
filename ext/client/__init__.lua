@@ -43,7 +43,7 @@ Events:Subscribe('UI:DrawHud', function()
 
   -- get yaw
   local camera = ClientUtils:GetCameraTransform()
-  local yaw = MathUtils:GetYPRFromULF(camera.up, camera.left, camera.forward).x
+  local yaw = YawFromForward(camera.forward)
 
   -- convert to degrees and display it
   local yawDeg = rad2deg(2 * math.pi - yaw)

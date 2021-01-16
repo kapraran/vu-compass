@@ -20,3 +20,18 @@ local __r2dc = 180/math.pi
 function rad2deg(rad)
   return math.floor(__r2dc * rad)
 end
+
+g_2PI = 2 * math.pi
+g_PI2 = math.pi / 2
+
+-- The valid values for each config option
+local validConfigOptions = {
+  ['position'] = {'top', 'bottom'},
+  ['indicator'] = {'arrow', 'needle'},
+  ['showDegrees'] = {'true', 'false'}
+}
+
+-- Returns the yaw from the forward vector
+function YawFromForward(forward)
+  return (math.atan(forward.z, forward.x) + g_PI2) % g_2PI;
+end
