@@ -7,12 +7,13 @@ new Vue({ render: (createElement) => createElement(App) }).$mount("#root");
 window.vext = vext;
 
 // debug
-// setInterval(() => {
-//   if (typeof WebUI === "undefined") {
-//     document.body.style.backgroundColor = "green";
-//     vext.enable(true);
-//     vext.setBottom(true);
-//     vext.showDegrees(true);
-//     vext.setIndicator("arrow");
-//   }
-// }, 1000)
+setInterval(() => {
+  if (typeof WebUI === "undefined") {
+    document.body.style.backgroundColor = "green";
+    vext.enable(true);
+    // vext.setBottom(true);
+    vext.showDegrees(true);
+    vext.setIndicator("arrow");
+    vext.setYaw(315)
+  }
+}, 1000)

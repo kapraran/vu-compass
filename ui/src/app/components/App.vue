@@ -7,19 +7,16 @@
       :indicator="indicator"
       :showDegrees="showDegrees"
     ></Compass>
-    <!-- <WarzoneCompass :enabled="enabled" :yaw="yaw"></WarzoneCompass> -->
   </div>
 </template>
 
 <script>
 import { state } from "../vext";
-import Compass from "./Compass";
-import WarzoneCompass from "./WarzoneCompass";
+import Compass from "./Compass/Compass";
 
 export default {
   components: {
     Compass,
-    WarzoneCompass,
   },
   data() {
     return state;
