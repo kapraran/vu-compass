@@ -34,11 +34,11 @@ $overflow-container-width: 60vh;
     span.current-yaw {
       position: absolute;
       left: 50%;
-      transform: translate(-5vh, 5.2vh);
+      transform: translate(-5vh, 4.4vh);
       width: 10vh;
       text-align: center;
       color: rgba(255, 255, 255, 0.68);
-      font-size: 1.4vh;
+      font-size: 1.3vh;
       text-shadow: 0 1px 2px rgba(0, 0, 0, 0.8);
     }
 
@@ -47,7 +47,7 @@ $overflow-container-width: 60vh;
       position: absolute;
       z-index: 0;
       left: 50%;
-      top: 1.4vh;
+      top: 0.6vh;
       width: 0.3vh;
       height: 2.8vh;
       min-width: 3px;
@@ -111,7 +111,7 @@ $overflow-container-width: 60vh;
         justify-content: center;
         width: 0.5vh;
         height: 3vh;
-        margin-right: 2.2vh;
+        margin-right: 2.1vh;
 
         &:last-child {
           margin-right: 0;
@@ -121,7 +121,7 @@ $overflow-container-width: 60vh;
           width: 0.4vh;
           height: 0.4vh;
           border-radius: 50%;
-          background-color: rgba(255, 255, 255, 0.36);
+          background-color: rgba(255, 255, 255, 0.28);
           box-shadow: 0 0 6px rgba(0, 0, 0, 0.56);
         }
 
@@ -132,15 +132,15 @@ $overflow-container-width: 60vh;
         &.full .tick {
           height: 1vh;
           min-width: 3px;
-          width: 0.3vh;
-          border-radius: 0;
+          width: 0.25vh;
+          border-radius: 1px;
           background-color: rgba(255, 255, 255, 0.64);
         }
 
         span {
           display: none;
           position: absolute;
-          font-size: 1.5vh;
+          font-size: 1.3vh;
           text-align: center;
           transform: translateY(1.2vh);
           font-weight: 400;
@@ -155,12 +155,12 @@ $overflow-container-width: 60vh;
         }
 
         &.semi span {
-          transform: translateY(1.5vh);
+          transform: translateY(1.1vh);
           color: rgba(252, 255, 228, 0.76);
         }
 
         &.full span {
-          font-size: 2vh;
+          font-size: 1.7vh;
           color: rgba(252, 255, 228, 0.84);
           font-weight: 500;
         }

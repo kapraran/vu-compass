@@ -1,18 +1,18 @@
-require('config')
-require('CachedJsExecutor')
+require('__shared/config')
 require('__shared/utils')
+require('CachedJsExecutor')
 
 local CompassClient = class('CompassClient')
 
 function CompassClient:__init()
-  self:RegisterVars()
-  self:RegisterEvents()
-end
-
-function CompassClient:RegisterVars()
   self.uiEnabled = CachedJsExecutor('vext.enable(%s)', false)
   self.uiYaw = CachedJsExecutor('vext.setYaw(%s)', 0)
 
+  self:ResetVars()
+  self:RegisterEvents()
+end
+
+function CompassClient:ResetVars()
   self.isHudOn = false
   self.isKillScreen = false
 end
@@ -26,11 +26,6 @@ function CompassClient:RegisterEvents()
 
   Hooks:Install('UI:PushScreen', 999, self, self.OnPushScreen)
   NetEvents:Subscribe('Compass:Config-Net', self, self.OnConfigReceived)
-end
-
-function CompassClient:ResetVars()
-  self.isHudOn = false
-  self.isKillScreen = false
 end
 
 -- Validates and syncs config options with the WebUI

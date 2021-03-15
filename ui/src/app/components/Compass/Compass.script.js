@@ -48,7 +48,7 @@ export default {
 
     ticksTranslateX() {
       const left = this.yaw % this.step;
-      const offset = (left / this.step) * 2.2;
+      const offset = (left / this.step) * 2.1;
       return `TranslateX(-${offset}vh)`;
     },
 
