@@ -14,7 +14,7 @@
     "build": "yarn clear & yarn build:parcel & yarn build:vuicc"
   },
   "devDependencies": {
-    "@vue/component-compiler-utils": "3.2.0",
+    "@vue/component-compiler-utils": "3.3.0",
     "sass": "1.29.0",
     "vue-template-compiler": "2.6.12"
   }
