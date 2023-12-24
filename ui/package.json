@@ -2,7 +2,7 @@
   "dependencies": {
     "parcel-bundler": "1.12.4",
     "prettier": "2.2.1",
-    "vue": "2.6.12",
+    "vue": "2.7.16",
     "vue-hot-reload-api": "2.3.4"
   },
   "scripts": {
@@ -16,6 +16,6 @@
   "devDependencies": {
     "@vue/component-compiler-utils": "3.2.0",
     "sass": "1.29.0",
-    "vue-template-compiler": "2.6.12"
+    "vue-template-compiler": "2.7.16"
   }
 }
