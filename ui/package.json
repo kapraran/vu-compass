@@ -1,7 +1,7 @@
 {
   "dependencies": {
     "parcel-bundler": "1.12.4",
-    "prettier": "2.2.1",
+    "prettier": "3.3.3",
     "vue": "2.6.12",
     "vue-hot-reload-api": "2.3.4"
   },
