@@ -11,11 +11,19 @@
     "prettier": "prettier --write \"src/**/*.{js,vue,css,scss,html}\" ",
     "build:parcel": "parcel build src/index.html --no-source-maps",
     "build:vuicc": "vuicc dist ../ui.vuic",
-    "build": "yarn clear & yarn build:parcel & yarn build:vuicc"
+    "build": "npm run clear & npm run build:parcel & npm run build:vuicc"
   },
   "devDependencies": {
     "@vue/component-compiler-utils": "3.2.0",
     "sass": "1.29.0",
     "vue-template-compiler": "2.6.12"
+  },
+  "overrides": {
+    "@babel/preset-env": "7.12.7",
+    "@babel/compat-data": "7.12.7",
+    "@babel/helper-compilation-targets": "7.12.5",
+    "browserslist": "4.15.0",
+    "caniuse-lite": "1.0.30001165",
+    "core-js-compat": "3.8.0"
   }
 }
