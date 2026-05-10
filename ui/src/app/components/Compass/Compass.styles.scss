@@ -1,18 +1,6 @@
 $arrow-sz: 0.4vh;
 $overflow-container-width: 60vh;
 
-@keyframes weird-chromium-glitch {
-  0% {
-    max-width: $overflow-container-width;
-  }
-  99% {
-    max-width: $overflow-container-width;
-  }
-  100% {
-    max-width: $overflow-container-width + 0.25vh;
-  }
-}
-
 .compass-widget {
   display: flex;
   justify-content: center;
@@ -27,12 +15,13 @@ $overflow-container-width: 60vh;
     justify-content: center;
     align-items: flex-start;
     height: 10vh;
-    // overflow: hidden;
-    max-width: $overflow-container-width; // make it dynamic
-    animation: weird-chromium-glitch 4s infinite;
+    overflow: hidden;
+    max-width: $overflow-container-width;
 
     span.current-yaw {
       position: absolute;
+      top: 0;
+      z-index: 1;
       left: 50%;
       transform: translate(-5vh, 4.4vh);
       width: 10vh;
@@ -68,12 +57,17 @@ $overflow-container-width: 60vh;
       }
 
       span.current-yaw {
+        top: auto;
+        bottom: 0;
         transform: translate(-5vh, -4.2vh);
       }
     }
 
     li.tick-container {
-      align-items: flex-end;
+      .tick {
+        top: auto;
+        bottom: 0;
+      }
 
       span {
         transform: translateY(-1.2vh) !important;
@@ -104,11 +98,10 @@ $overflow-container-width: 60vh;
       padding: 0;
       margin: 0;
       display: flex;
+      list-style: none;
 
       li.tick-container {
         position: relative;
-        display: flex;
-        justify-content: center;
         width: 0.5vh;
         height: 3vh;
         margin-right: 2.1vh;
@@ -118,6 +111,11 @@ $overflow-container-width: 60vh;
         }
 
         .tick {
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          margin: 0 auto;
           width: 0.4vh;
           height: 0.4vh;
           border-radius: 50%;
