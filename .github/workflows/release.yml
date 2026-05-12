@@ -1,0 +1,46 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - 'v*'
+
+jobs:
+  build:
+    runs-on: windows-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v6
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 22
+          cache: npm
+          cache-dependency-path: ui/package-lock.json
+
+      - name: Install
+        run: cd ui && npm ci
+
+      - name: Build
+        run: cd ui && npm run build
+
+      - name: Stage release files
+        shell: pwsh
+        run: |
+          New-Item -ItemType Directory -Path release
+          Copy-Item -Path ext -Destination release/ext -Recurse
+          Copy-Item -Path mod.json -Destination release/
+          Copy-Item -Path ui.vuic -Destination release/
+
+      - name: Zip
+        shell: pwsh
+        run: |
+          Compress-Archive -Path release/* -DestinationPath "vu-compass-${{ github.ref_name }}.zip"
+
+      - name: Release
+        uses: softprops/action-gh-release@v3
+        with:
+          files: vu-compass-*.zip
+          body: ''
+          prerelease: false
