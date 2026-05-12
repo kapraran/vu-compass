@@ -2,7 +2,16 @@ import { state } from "../vext";
 import { drawCompass } from "./renderer";
 
 export class Compass {
-  constructor(container) {
+  private widget: HTMLDivElement;
+  private canvas: HTMLCanvasElement;
+  private ctx: CanvasRenderingContext2D;
+  private currentYaw: number;
+  private width = 0;
+  private height = 0;
+  private fontsReady = false;
+  private wasEnabled = false;
+
+  constructor(container: HTMLElement) {
     this.widget = document.createElement("div");
     this.widget.className = "compass-widget";
     container.appendChild(this.widget);
@@ -10,13 +19,9 @@ export class Compass {
     this.canvas = document.createElement("canvas");
     this.canvas.className = "compass-canvas";
     this.widget.appendChild(this.canvas);
-    this.ctx = this.canvas.getContext("2d");
+    this.ctx = this.canvas.getContext("2d")!;
 
     this.currentYaw = state.yaw;
-    this.width = 0;
-    this.height = 0;
-    this.fontsReady = false;
-    this.wasEnabled = false;
 
     requestAnimationFrame(() => this.resize());
     window.addEventListener("resize", () => this.resize());
@@ -27,18 +32,16 @@ export class Compass {
     });
   }
 
-  initFonts() {
+  private initFonts(): Promise<void> {
     if (document.fonts && document.fonts.ready) {
-      return document.fonts.ready;
+      return document.fonts.ready.then(() => undefined);
     }
-    return new Promise(function (r) {
-      setTimeout(r, 500);
-    });
+    return new Promise((r) => setTimeout(r, 500));
   }
 
-  resize() {
-    var rect = this.widget.getBoundingClientRect();
-    var dpr = window.devicePixelRatio || 1;
+  private resize(): void {
+    const rect = this.widget.getBoundingClientRect();
+    const dpr = window.devicePixelRatio || 1;
     this.width = rect.width;
     this.height = rect.height;
     if (this.width === 0 || this.height === 0) return;
@@ -47,17 +50,17 @@ export class Compass {
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  startLoop() {
-    var self = this;
-    function loop() {
-      self.tick();
+  private startLoop(): void {
+    const loop = () => {
+      this.tick();
       requestAnimationFrame(loop);
-    }
+    };
     requestAnimationFrame(loop);
   }
 
-  tick() {
+  private tick(): void {
     if (!this.canvas.parentNode) return;
+
     if (!state.enabled) {
       if (this.wasEnabled) {
         this.resize();
@@ -74,7 +77,7 @@ export class Compass {
       if (this.width === 0 || this.height === 0) return;
     }
 
-    var diff = state.yaw - this.currentYaw;
+    let diff = state.yaw - this.currentYaw;
     while (diff > 180) diff -= 360;
     while (diff < -180) diff += 360;
     this.currentYaw += diff * 0.15;

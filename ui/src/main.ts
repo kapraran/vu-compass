@@ -1,13 +1,15 @@
+import "./style.css";
 import { Compass } from "./compass";
 import { vext } from "./vext";
 
-new Compass(document.getElementById("root"));
+new Compass(document.getElementById("root")!);
 
-window.vext = vext;
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+(window as any).vext = vext;
 
 // debug
-setInterval(function () {
-  if (typeof WebUI === "undefined") {
+setInterval(() => {
+  if (typeof (window as any).WebUI === "undefined") {
     document.body.style.backgroundColor = "green";
     vext.enable(true);
     vext.showDegrees(true);

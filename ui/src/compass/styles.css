@@ -5,11 +5,11 @@
   margin-left: -30vh;
   width: 60vh;
   height: 10vh;
+}
 
-  &.bottom {
-    top: auto;
-    bottom: 0;
-  }
+.compass-widget.bottom {
+  top: auto;
+  bottom: 0;
 }
 
 .compass-canvas {
