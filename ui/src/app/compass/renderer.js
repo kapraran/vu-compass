@@ -14,8 +14,6 @@ export function drawCompass(ctx, w, h, state) {
   var stripTop = bottom ? h - stripHeight - 0.5 * vh : 0.5 * vh;
   var stripBottom = stripTop + stripHeight;
   var tickBaseY = bottom ? stripBottom : stripTop;
-  var labelOffset = 1.2 * vh;
-  var labelY = bottom ? tickBaseY - labelOffset : tickBaseY + labelOffset;
 
   var tickSpacing = 2.1 * vh;
   var pxPerDeg = tickSpacing / 5;
@@ -27,7 +25,7 @@ export function drawCompass(ctx, w, h, state) {
   var fadeZone = 10 * vh;
 
   ctx.textAlign = 'center';
-  ctx.textBaseline = 'middle';
+  ctx.textBaseline = 'top';
 
   for (var deg = startDeg; deg <= endDeg; deg += 5) {
     var offsetDeg = deg - yaw;
@@ -61,7 +59,7 @@ export function drawCompass(ctx, w, h, state) {
       ctx.shadowColor = 'rgba(0, 13, 71, 0.92)';
       ctx.font = '500 ' + (1.7 * vh) + 'px Poppins';
       ctx.fillStyle = 'rgba(252, 255, 228, 0.84)';
-      ctx.fillText(DEG_LABELS[tickYaw / 45], x, labelY);
+      ctx.fillText(DEG_LABELS[tickYaw / 45], x, stripTop + (bottom ? -1.2 * vh : 1.2 * vh));
       ctx.shadowBlur = 6;
       ctx.shadowColor = 'rgba(0, 0, 0, 0.56)';
     } else if (isSemi) {
@@ -76,7 +74,7 @@ export function drawCompass(ctx, w, h, state) {
       ctx.shadowColor = 'rgba(0, 13, 71, 0.92)';
       ctx.font = '400 ' + (1.3 * vh) + 'px Poppins';
       ctx.fillStyle = 'rgba(252, 255, 228, 0.76)';
-      ctx.fillText(tickYaw.toString(), x, labelY);
+      ctx.fillText(tickYaw.toString(), x, stripTop + (bottom ? -1.1 * vh : 1.1 * vh));
       ctx.shadowBlur = 6;
       ctx.shadowColor = 'rgba(0, 0, 0, 0.56)';
     } else {
