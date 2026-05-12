@@ -1,5 +1,6 @@
-import { state } from "../vext";
+import { state, setEnableCallback } from "../vext";
 import { drawCompass } from "./renderer";
+import { CONFIG } from "./config";
 
 export class Compass {
   private widget: HTMLDivElement;
@@ -10,6 +11,7 @@ export class Compass {
   private height = 0;
   private fontsReady = false;
   private wasEnabled = false;
+  private loopHandle: number | null = null;
 
   constructor(container: HTMLElement) {
     this.widget = document.createElement("div");
@@ -26,17 +28,22 @@ export class Compass {
     requestAnimationFrame(() => this.resize());
     window.addEventListener("resize", () => this.resize());
 
+    setEnableCallback((enabled) => {
+      if (enabled) this.scheduleTick();
+    });
+
     this.initFonts().then(() => {
       this.fontsReady = true;
-      this.startLoop();
+      this.scheduleTick();
     });
   }
 
-  private initFonts(): Promise<void> {
+  private async initFonts(): Promise<void> {
     if (document.fonts && document.fonts.ready) {
-      return document.fonts.ready.then(() => undefined);
+      await document.fonts.ready;
+      return;
     }
-    return new Promise((r) => setTimeout(r, 500));
+    await new Promise((r) => setTimeout(r, 500));
   }
 
   private resize(): void {
@@ -50,12 +57,16 @@ export class Compass {
     this.ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
   }
 
-  private startLoop(): void {
-    const loop = () => {
+  private scheduleTick(): void {
+    if (this.loopHandle !== null) return;
+    this.loopHandle = requestAnimationFrame(() => {
+      this.loopHandle = null;
+      if (!this.canvas.parentNode) return;
       this.tick();
-      requestAnimationFrame(loop);
-    };
-    requestAnimationFrame(loop);
+      if (state.enabled || this.wasEnabled) {
+        this.scheduleTick();
+      }
+    });
   }
 
   private tick(): void {
@@ -80,7 +91,7 @@ export class Compass {
     let diff = state.yaw - this.currentYaw;
     while (diff > 180) diff -= 360;
     while (diff < -180) diff += 360;
-    this.currentYaw += diff * 0.15;
+    this.currentYaw += diff * CONFIG.LERP_FACTOR;
     this.currentYaw = ((this.currentYaw % 360) + 360) % 360;
 
     this.widget.classList.toggle("bottom", state.bottom);
