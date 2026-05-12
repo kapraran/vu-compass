@@ -1,19 +1,17 @@
-import Vue from "vue";
-import App from "./components/App.vue";
-import { vext } from "./vext";
+import { Compass } from './compass';
+import { vext } from './vext';
 
-new Vue({ render: (createElement) => createElement(App) }).$mount("#root");
+new Compass(document.getElementById('root'));
 
 window.vext = vext;
 
 // debug
-setInterval(() => {
-  if (typeof WebUI === "undefined") {
-    document.body.style.backgroundColor = "green";
+setInterval(function () {
+  if (typeof WebUI === 'undefined') {
+    document.body.style.backgroundColor = 'green';
     vext.enable(true);
-    // vext.setBottom(true);
     vext.showDegrees(true);
-    vext.setIndicator("arrow");
-    vext.setYaw(315)
+    vext.setIndicator('arrow');
+    vext.setYaw(315);
   }
-}, 1000)
+}, 1000);

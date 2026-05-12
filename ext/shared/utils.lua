@@ -1,4 +1,4 @@
-g_Version = '1.2.1'
+g_Version = '1.3.0'
 g_IsDebug = false
 
 g_2PI = 2 * math.pi
@@ -22,9 +22,9 @@ function firstToUpper(str)
   return (str:gsub("^%l", string.upper))
 end
 
--- Converts rads to degrees
+-- Converts rads to degrees (fractional, 2 decimals for smooth UI)
 function rad2deg(rad)
-  return math.floor(g_R2DC * rad)
+  return tonumber(string.format("%.2f", g_R2DC * rad))
 end
 
 -- Searches a table for a certain value

@@ -1,9 +1,7 @@
 {
   "dependencies": {
     "parcel-bundler": "1.12.4",
-    "prettier": "2.2.1",
-    "vue": "2.6.12",
-    "vue-hot-reload-api": "2.3.4"
+    "prettier": "2.2.1"
   },
   "scripts": {
     "start": "parcel src/index.html",
@@ -14,9 +12,7 @@
     "build": "npm run clear & npm run build:parcel & npm run build:vuicc"
   },
   "devDependencies": {
-    "@vue/component-compiler-utils": "3.2.0",
-    "sass": "1.29.0",
-    "vue-template-compiler": "2.6.12"
+    "sass": "1.29.0"
   },
   "overrides": {
     "@babel/preset-env": "7.12.7",
