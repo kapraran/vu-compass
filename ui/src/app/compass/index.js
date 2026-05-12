@@ -1,16 +1,16 @@
-import { state } from '../vext';
-import { drawCompass } from './renderer';
+import { state } from "../vext";
+import { drawCompass } from "./renderer";
 
 export class Compass {
   constructor(container) {
-    this.widget = document.createElement('div');
-    this.widget.className = 'compass-widget';
+    this.widget = document.createElement("div");
+    this.widget.className = "compass-widget";
     container.appendChild(this.widget);
 
-    this.canvas = document.createElement('canvas');
-    this.canvas.className = 'compass-canvas';
+    this.canvas = document.createElement("canvas");
+    this.canvas.className = "compass-canvas";
     this.widget.appendChild(this.canvas);
-    this.ctx = this.canvas.getContext('2d');
+    this.ctx = this.canvas.getContext("2d");
 
     this.currentYaw = state.yaw;
     this.width = 0;
@@ -19,7 +19,7 @@ export class Compass {
     this.wasEnabled = false;
 
     requestAnimationFrame(() => this.resize());
-    window.addEventListener('resize', () => this.resize());
+    window.addEventListener("resize", () => this.resize());
 
     this.initFonts().then(() => {
       this.fontsReady = true;
@@ -31,7 +31,9 @@ export class Compass {
     if (document.fonts && document.fonts.ready) {
       return document.fonts.ready;
     }
-    return new Promise(function (r) { setTimeout(r, 500); });
+    return new Promise(function (r) {
+      setTimeout(r, 500);
+    });
   }
 
   resize() {
@@ -55,6 +57,7 @@ export class Compass {
   }
 
   tick() {
+    if (!this.canvas.parentNode) return;
     if (!state.enabled) {
       if (this.wasEnabled) {
         this.resize();
@@ -77,7 +80,7 @@ export class Compass {
     this.currentYaw += diff * 0.15;
     this.currentYaw = ((this.currentYaw % 360) + 360) % 360;
 
-    this.widget.classList.toggle('bottom', state.bottom);
+    this.widget.classList.toggle("bottom", state.bottom);
 
     if (!this.fontsReady) return;
 
