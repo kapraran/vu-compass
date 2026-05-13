@@ -1,4 +1,4 @@
-g_Version = '1.3.3'
+g_Version = '1.4.0'
 g_IsDebug = false
 
 g_2PI = 2 * math.pi
@@ -7,6 +7,7 @@ g_R2DC = 180 / math.pi
 
 -- The valid values for each config option
 local validConfigOptions = {
+  ['theme'] = {'classic', 'warzone'},
   ['position'] = {'top', 'bottom'},
   ['indicator'] = {'arrow', 'needle'},
   ['showDegrees'] = {'true', 'false'}
@@ -40,11 +41,14 @@ end
 
 -- Checks if a config value for a certain option is valid
 function IsValidConfigValue(option, value)
-  -- make sure showDegrees is a string
+  if option == 'scale' then
+    local num = tonumber(value)
+    return num ~= nil and num >= 0.5 and num <= 2.0
+  end
+
   if option == 'showDegrees' then
     value = tostring(value):lower()
   end
 
-  -- check if option exists and value is valid
   return validConfigOptions[option] ~= nil and table.indexOf(validConfigOptions[option], value) ~= nil
 end

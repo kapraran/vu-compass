@@ -8,6 +8,8 @@ export function setEnableCallback(cb: EnableCallback): void {
 export interface CompassState {
   enabled: boolean;
   yaw: number;
+  theme: "classic" | "warzone";
+  scale: number;
   bottom: boolean;
   indicator: "arrow" | "needle";
   showDegrees: boolean;
@@ -20,6 +22,8 @@ function wrapYaw(yaw: number): number {
 export const state: CompassState = {
   enabled: false,
   yaw: 0,
+  theme: "warzone",
+  scale: 1,
   bottom: false,
   indicator: "arrow",
   showDegrees: true,
@@ -32,6 +36,12 @@ export const vext = {
   },
   setYaw(yaw: number): void {
     state.yaw = wrapYaw(yaw);
+  },
+  setTheme(theme: "classic" | "warzone"): void {
+    state.theme = theme;
+  },
+  setScale(scale: number): void {
+    state.scale = Math.max(0.5, Math.min(2, scale));
   },
   setBottom(bottom: boolean): void {
     state.bottom = bottom;
