@@ -1,29 +1,56 @@
 ![vu-compass](./assets/vu-compass.small.png)
 
 # vu-compass
-A compass UI mod for Venice Unleashed
+A compass UI mod for Venice Unleashed, rewritten as a lightweight Canvas 2D TypeScript app with Vite.
 
 ### About
 
-The compass widget that we all know and love 😜 from games like PR, PUBG, Squad, etc. is now available as a standalone mod for Venice Unleashed. Just add it to your ModList and it should work out of the box with any other mod or on any vanilla server.
+The compass widget that we all know and love from games like PR, PUBG, Squad, etc. is now available as a standalone mod for Venice Unleashed. Just add it to your ModList and it should work out of the box with any other mod or on any vanilla server.
 
-[See it in action](https://www.youtube.com/watch?v=lqQGXFswomc)
+### Themes
+
+Two themes are built in:
+
+| Theme     | Default | Step | Font       | Indicator       | Notes                          |
+|-----------|---------|------|------------|-----------------|--------------------------------|
+| `warzone` | yes     | 15°  | Unica One  | Center panel    | No extra configs               |
+| `classic` |         | 5°   | Poppins    | Arrow or needle | Supports position/indicator/showDegrees |
+
+Change theme at runtime: `compass.SetTheme classic`
 
 ### Config
 
-You can check the `ext/client/config.lua` file for the available config options. You can change those options:
-1. by directly changing the config file
-2. using the RCON commands `compass.SetPosition`, `compass.SetIndicator` and `compass.ShowDegrees`
-3. by dispatching an event from another mod, passing your preferred values
+Config lives in `ext/shared/config.lua`. Options:
+
+| Option         | Values                 | Default     | Theme     |
+|----------------|------------------------|-------------|-----------|
+| `theme`        | `'classic'`, `'warzone'` | `'warzone'` | both      |
+| `scale`        | `0.5` – `2.0`          | `1.0`       | both      |
+| `position`     | `'top'`, `'bottom'`    | `'top'`     | classic   |
+| `indicator`    | `'arrow'`, `'needle'`  | `'arrow'`   | classic   |
+| `showDegrees`  | `true`, `false`        | `true`      | classic   |
+
+You can change config:
+1. by directly editing `ext/shared/config.lua`
+2. using RCON commands: `compass.SetTheme`, `compass.SetScale`, `compass.SetPosition`, `compass.SetIndicator`, `compass.ShowDegrees`
+3. by dispatching an event from another mod:
 ```lua
--- update the config from another mod example
 Events:Dispatch('Compass:Config', {
+  ['theme'] = 'classic',
+  ['scale'] = 1.0,
   ['position'] = 'bottom'
 })
 ```
 
-### Warzone Compass
+### Build
 
-![vu-compass warzone](./assets/vu-compass.warzone.small.png)
+Requires Node.js. From the `ui/` directory:
 
-I also added a Warzone styled compass as a *bonus*. You can use it by downloading the contents of the [warzone branch](https://github.com/kapraran/vu-compass/tree/warzone). It doesn't support any config options though.
+```sh
+npm install
+npm run lint       
+npm run fmt 
+npm run build      # typecheck + bundle + compile ui.vuic
+```
+
+The compiled `ui.vuic` is generated at the repo root and is gitignored.

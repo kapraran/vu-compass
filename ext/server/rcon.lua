@@ -1,11 +1,13 @@
 require('__shared/utils')
 
-function OnConfigOptionReceived(option, value, isBool)
+function OnConfigOptionReceived(option, value, isBool, isNumeric)
   if not IsValidConfigValue(option, value) then
     return { 'Invalid' .. firstToUpper(option) }
   end
 
-  if isBool then
+  if isNumeric then
+    value = tonumber(value)
+  elseif isBool then
     value = (value:lower() == 'true')
   end
 
@@ -15,6 +17,14 @@ function OnConfigOptionReceived(option, value, isBool)
 
   return { 'OK' }
 end
+
+RCON:RegisterCommand('compass.SetTheme', RemoteCommandFlag.RequiresLogin, function(command, args, loggedIn)
+  return OnConfigOptionReceived('theme', args[1])
+end)
+
+RCON:RegisterCommand('compass.SetScale', RemoteCommandFlag.RequiresLogin, function(command, args, loggedIn)
+  return OnConfigOptionReceived('scale', args[1], false, true)
+end)
 
 RCON:RegisterCommand('compass.SetPosition', RemoteCommandFlag.RequiresLogin, function(command, args, loggedIn)
   return OnConfigOptionReceived('position', args[1])

@@ -43,3 +43,10 @@ body {
   font-weight: 700;
   src: url("/fonts/poppins-v15-latin-700.ttf") format("truetype");
 }
+
+@font-face {
+  font-family: "Unica One";
+  font-style: normal;
+  font-weight: 400;
+  src: url("/fonts/unica-one-regular.ttf") format("truetype");
+}

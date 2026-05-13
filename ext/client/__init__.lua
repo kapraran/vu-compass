@@ -7,6 +7,8 @@ local CompassClient = class('CompassClient')
 function CompassClient:__init()
   self.uiEnabled = CachedJsExecutor('vext.enable(%s)', false)
   self.uiYaw = CachedJsExecutor('vext.setYaw(%s)', 0)
+  self.uiTheme = CachedJsExecutor('vext.setTheme("%s")', 'warzone')
+  self.uiScale = CachedJsExecutor('vext.setScale(%s)', 1)
 
   self:ResetVars()
   self:RegisterEvents()
@@ -30,21 +32,38 @@ end
 
 -- Validates and syncs config options with the WebUI
 function CompassClient:SyncConfig()
-  -- position
-  if not IsValidConfigValue('position', Config.position) then
-    Config.position = 'top'
+  -- theme
+  if not IsValidConfigValue('theme', Config.theme) then
+    Config.theme = 'classic'
   end
-  WebUI:ExecuteJS(string.format('vext.setBottom(%s)', tostring(Config.position == 'bottom')))
+  self.uiTheme:Update(Config.theme)
 
-  -- indicator
-  if not IsValidConfigValue('indicator', Config.indicator) then
-    Config.indicator = 'arrow'
+  -- scale
+  local scaleNum = tonumber(Config.scale)
+  if scaleNum == nil or scaleNum < 0.5 or scaleNum > 2.0 then
+    Config.scale = 1.0
+    scaleNum = 1.0
   end
-  WebUI:ExecuteJS(string.format('vext.setIndicator("%s")', Config.indicator))
+  self.uiScale:Update(scaleNum)
 
-  -- showDegrees
-  Config.showDegrees = not (not Config.showDegrees)
-  WebUI:ExecuteJS(string.format('vext.showDegrees(%s)', tostring(Config.showDegrees)))
+  -- classic-only settings
+  if Config.theme == 'classic' then
+    -- position
+    if not IsValidConfigValue('position', Config.position) then
+      Config.position = 'top'
+    end
+    WebUI:ExecuteJS(string.format('vext.setBottom(%s)', tostring(Config.position == 'bottom')))
+
+    -- indicator
+    if not IsValidConfigValue('indicator', Config.indicator) then
+      Config.indicator = 'arrow'
+    end
+    WebUI:ExecuteJS(string.format('vext.setIndicator("%s")', Config.indicator))
+
+    -- showDegrees
+    Config.showDegrees = not (not Config.showDegrees)
+    WebUI:ExecuteJS(string.format('vext.showDegrees(%s)', tostring(Config.showDegrees)))
+  end
 end
 
 -- Validates & syncs the config options that are received from other mods or RCON

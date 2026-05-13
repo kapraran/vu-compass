@@ -1,6 +1,6 @@
 import { state, setEnableCallback } from "../vext";
 import { drawCompass } from "./renderer";
-import { CONFIG } from "./config";
+import { THEMES } from "./themes";
 
 export class Compass {
   private widget: HTMLDivElement;
@@ -10,8 +10,11 @@ export class Compass {
   private width = 0;
   private height = 0;
   private fontsReady = false;
+  private currentFontFamily = "";
   private wasEnabled = false;
   private loopHandle: number | null = null;
+  private lastScale = state.scale;
+  private lastTheme = state.theme;
 
   constructor(container: HTMLElement) {
     this.widget = document.createElement("div");
@@ -32,21 +35,49 @@ export class Compass {
       if (enabled) this.scheduleTick();
     });
 
-    this.initFonts().then(() => {
+      this.loadFonts().then(() => {
       this.fontsReady = true;
       this.scheduleTick();
     });
   }
 
-  private async initFonts(): Promise<void> {
+  private async loadFonts(): Promise<void> {
+    if (typeof FontFace !== "undefined") {
+      try {
+        const faces = [
+          new FontFace("Poppins", "url(/fonts/poppins-v15-latin-regular.ttf)", { weight: "400" }),
+          new FontFace("Poppins", "url(/fonts/poppins-v15-latin-500.ttf)", { weight: "500" }),
+          new FontFace("Poppins", "url(/fonts/poppins-v15-latin-700.ttf)", { weight: "700" }),
+          new FontFace("Unica One", "url(/fonts/unica-one-regular.ttf)", { weight: "400" }),
+          new FontFace("Unica One", "url(/fonts/unica-one-regular.ttf)", { weight: "700" }),
+        ];
+
+        await Promise.all(faces.map(async (face) => {
+          const loaded = await face.load();
+          document.fonts.add(loaded);
+        }));
+        return;
+      } catch {
+        // FontFace API failed, fall through
+      }
+    }
+
     if (document.fonts && document.fonts.ready) {
       await document.fonts.ready;
-      return;
+    } else {
+      await new Promise((r) => setTimeout(r, 1000));
     }
-    await new Promise((r) => setTimeout(r, 500));
+  }
+
+  private applyScale(): void {
+    const theme = THEMES[state.theme];
+    const h = theme.CANVAS_HEIGHT_VH * state.scale;
+    this.widget.style.height = `${h}vh`;
   }
 
   private resize(): void {
+    this.applyScale();
+
     const rect = this.widget.getBoundingClientRect();
     const dpr = window.devicePixelRatio || 1;
     this.width = rect.width;
@@ -88,18 +119,36 @@ export class Compass {
       if (this.width === 0 || this.height === 0) return;
     }
 
+    if (state.scale !== this.lastScale || state.theme !== this.lastTheme) {
+      this.resize();
+      this.lastScale = state.scale;
+      this.lastTheme = state.theme;
+    }
+
+    const theme = THEMES[state.theme];
+
+    if (theme.FONT_FAMILY !== this.currentFontFamily) {
+      this.currentFontFamily = theme.FONT_FAMILY;
+      this.fontsReady = false;
+    this.loadFonts().then(() => {
+        this.fontsReady = true;
+      });
+      return;
+    }
+
+    if (!this.fontsReady) return;
+
     let diff = state.yaw - this.currentYaw;
     while (diff > 180) diff -= 360;
     while (diff < -180) diff += 360;
-    this.currentYaw += diff * CONFIG.LERP_FACTOR;
+    this.currentYaw += diff * theme.LERP_FACTOR;
     this.currentYaw = ((this.currentYaw % 360) + 360) % 360;
 
     this.widget.classList.toggle("bottom", state.bottom);
 
-    if (!this.fontsReady) return;
-
     drawCompass(this.ctx, this.width, this.height, {
       yaw: this.currentYaw,
+      theme,
       bottom: state.bottom,
       indicator: state.indicator,
       showDegrees: state.showDegrees,
