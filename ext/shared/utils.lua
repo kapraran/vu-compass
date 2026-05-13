@@ -1,4 +1,4 @@
-g_Version = '1.4.0'
+g_Version = '1.4.1'
 g_IsDebug = false
 
 g_2PI = 2 * math.pi
